@@ -27,3 +27,11 @@ gcloud container clusters get-credentials <cluster-name>
 # Test
 kubectl get nodes
 ```
+
+### Command reference
+
+Find external cluster IP: `gcloud compute addressed list`.
+
+## References
+
+- Terraform GKE setup based on [How to Run a GKE Cluster on the Cheap](https://github.com/murphye/cheap-gke-cluster/)

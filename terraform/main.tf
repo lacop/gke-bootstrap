@@ -25,3 +25,7 @@ variable "machine_type" {
 variable "disk_size" {
     description = "Disk size for the GKE cluster nodes"
 }
+
+variable "ip_address_name" {
+    description = "Name of the static external IP address for the load balancer"
+}

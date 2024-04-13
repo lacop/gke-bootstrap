@@ -8,3 +8,5 @@ num_nodes = 3
 
 machine_type = "e2-standard-2"
 disk_size = 20
+
+ip_address_name = "lovelace-lb-ip"
