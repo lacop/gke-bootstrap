@@ -13,29 +13,37 @@
 
     # 467.0.0
     gcloud_dep.url = "github:NixOs/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351";
+
+    # 1.29.3
+    kubectl_dep.url = "github:NixOs/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351";
   };
 
-  outputs = { self, flake-utils, terraform_dep, helm_dep, gcloud_dep }@inputs :
+  outputs = { self, flake-utils, terraform_dep, helm_dep, gcloud_dep, kubectl_dep }@inputs :
     flake-utils.lib.eachDefaultSystem (system:
     let
       terraform_dep = import inputs.terraform_dep { inherit system; config.allowUnfree = true; };
       helm_dep = inputs.helm_dep.legacyPackages.${system};
       gcloud_dep = inputs.gcloud_dep.legacyPackages.${system};
+      kubectl_dep = inputs.kubectl_dep.legacyPackages.${system};
     in
     {
       devShells.default = helm_dep.mkShell {
         packages = [
           terraform_dep.terraform
           helm_dep.kubernetes-helm
-          gcloud_dep.google-cloud-sdk
+          (gcloud_dep.google-cloud-sdk.withExtraComponents [
+            gcloud_dep.google-cloud-sdk.components.gke-gcloud-auth-plugin
+          ])
+          kubectl_dep.kubectl
         ];
 
         shellHook = ''
           echo -e "\033[0;31mCloud dev env\033[0m"
           echo -e "\033[0;31m-------------\033[0m"
-          terraform version | head -n 1
+          terraform version | head -n1
           echo "Helm $(helm version --short)"
-          gcloud version | head -n 1
+          gcloud version | head -n1
+          echo "kubectl $(kubectl version --client | head -n1)"
           echo -e "\033[0;31m-------------\033[0m"
           export PS1="nix[cloud]> "
         '';
