@@ -1,0 +1,10 @@
+project_id = "kubes-417312"
+
+region = "europe-west1"
+zone = "europe-west1-b"
+
+gke_cluster_name = "lovelace"
+num_nodes = 3
+
+machine_type = "e2-standard-2"
+disk_size = 20
