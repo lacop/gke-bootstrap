@@ -13,6 +13,7 @@ resource "google_container_cluster" "default" {
 
     networking_mode = "VPC_NATIVE"
     network = google_compute_network.default.name
+    subnetwork = google_compute_subnetwork.default.name
     
     logging_service = "none"
 
