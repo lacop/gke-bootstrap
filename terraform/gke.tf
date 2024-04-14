@@ -17,6 +17,8 @@ resource "google_container_cluster" "default" {
     network = google_compute_network.default.name
     subnetwork = google_compute_subnetwork.default.name
     
+    # TODO: Enable this? Without it debugging is impossible. Check what
+    #       the costs would be for reasonable deployments.
     logging_service = "none"
 
     node_config {

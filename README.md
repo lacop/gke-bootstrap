@@ -46,8 +46,11 @@ IP_NAME=$(terraform output -raw ip_address_name)
 EXTERNAL_IP=$(gcloud compute addresses describe $IP_NAME --format='value(address)')
 
 curl http://${EXTERNAL_IP}/
+
+# Remove when done testing.
+kubectl delete -f demo/demo.yaml
 ```
 
 ## Command reference
 
-Find external cluster IP: `gcloud compute addressed list`.
+Find external cluster IP: `gcloud compute addresses list`.
