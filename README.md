@@ -10,6 +10,8 @@ Requires `nix` and flakes enabled. Then just `nix develop --no-write-lock-file` 
 
 ## GKE initial bootstrap
 
+Copy `terraform/terraform.tfvars.template` to `terraform/terraform.tfvars` and edit as required, then run the following.
+
 ```shell
 # Configure gcloud CLI
 gcloud config set project <id>
@@ -19,16 +21,17 @@ gcloud config set compute/zone europe-west1-b
 # Enable GKE.
 gcloud services enable container.googleapis.com
 
-# Terraform setup
+# Terraform setup.
 cd terraform/
 terraform init
-terraform plan -vars-file=terraform.tfvars.template
-# Review the output
-terraform apply -vars-file=terraform.tfvars.template
 
-# Setup kubectl
+# Update loop - repeat these two after any changes.
+terraform plan
+# Review the output and apply.
+terraform apply
+
+# Setup kubectl and check that it works.
 gcloud container clusters get-credentials <cluster-name>
-# Test
 kubectl get nodes
 ```
 

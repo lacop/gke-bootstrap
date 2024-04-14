@@ -1,4 +1,5 @@
-project_id = "kubes-417312"
+# FIXME: Fill out at least this.
+#project_id = "<your-project-id>"
 
 region = "europe-west1"
 zone = "europe-west1-b"
