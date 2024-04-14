@@ -29,3 +29,7 @@ variable "disk_size" {
 variable "ip_address_name" {
     description = "Name of the static external IP address for the load balancer"
 }
+
+variable "network_name" {
+    description = "Name of the VPC network"
+}

@@ -12,6 +12,7 @@ resource "google_container_cluster" "default" {
     initial_node_count = var.num_nodes
 
     networking_mode = "VPC_NATIVE"
+    network = google_compute_network.default.name
     
     logging_service = "none"
 
@@ -48,4 +49,20 @@ resource "google_container_cluster" "default" {
             display_name = "Allow all"
         }
     }
+}
+
+resource "google_compute_network" "default" {
+    name = var.network_name
+    auto_create_subnetworks = false
+    project = var.project_id
+    routing_mode = "REGIONAL"
+}
+
+resource "google_compute_subnetwork" "default" {
+    depends_on = [google_compute_network.default]
+    name = "${var.network_name}-subnet"
+    project = google_compute_network.default.project
+    region = var.region
+    network = google_compute_network.default.name
+    ip_cidr_range = "10.0.0.0/24"
 }
