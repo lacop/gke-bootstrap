@@ -46,6 +46,13 @@ resource "google_container_cluster" "default" {
         master_ipv4_cidr_block = "172.16.0.16/28"
     }
 
+    # TODO: Research and enable?
+    # default_snat_status {
+    #     # More info on why sNAT needs to be disabled: https://cloud.google.com/kubernetes-engine/docs/how-to/alias-ips#enable_pupis
+    #     # This applies to VPC-native GKE clusters
+    #     disabled = true
+    # }
+
     master_authorized_networks_config {
         cidr_blocks {
             cidr_block = "0.0.0.0/0"
