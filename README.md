@@ -31,8 +31,21 @@ terraform plan
 terraform apply
 
 # Setup kubectl and check that it works.
-gcloud container clusters get-credentials <cluster-name>
+gcloud container clusters get-credentials $(terraform output -raw gke_cluster_name)
 kubectl get nodes
+```
+
+## Demo app for testing
+
+```shell
+# Deploy the demo service.
+kubectl apply -f demo/demo.yaml
+
+# Figure out external IP. 
+IP_NAME=$(terraform output -raw ip_address_name)
+EXTERNAL_IP=$(gcloud compute addresses describe $IP_NAME --format='value(address)')
+
+curl http://${EXTERNAL_IP}/
 ```
 
 ## Command reference

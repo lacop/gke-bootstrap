@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+  name: demo
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+        - image: nginx:1.7.9
+          name: nginx
+          ports:
+            - containerPort: 80
+              name: http
+      # todo anti-affinity
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: demo
+  name: demo
+  namespace: default
+spec:
+  ports:
+    - port: 8080
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: demo
+---
+apiVersion: gateway.solo.io/v1
+kind: VirtualService
+metadata:
+  name: default
+  namespace: gloo-system
+spec:
+  virtualHost:
+    domains:
+      - "*"
+    routes:
+      - matchers:
+          - exact: /
+        routeAction:
+          single:
+            upstream:
+              name: default-demo-8080
+              namespace: gloo-system
+---
+apiVersion: gloo.solo.io/v1
+kind: Upstream
+metadata:
+  name: default-demo-8080
+  namespace: gloo-system
+spec:
+  discoveryMetadata:
+    labels:
+      service: demo
+  kube:
+    selector:
+      app: demo
+    serviceName: demo
+    serviceNamespace: default
+    servicePort: 8080
+  healthChecks:
+    - healthyThreshold: 1
+      httpHealthCheck:
+        path: /
+      interval: 3s
+      timeout: 1s
+      unhealthyThreshold: 1
+      reuseConnection: false
+      noTrafficInterval: 5s # Start
+  ignoreHealthOnHostRemoval: true
