@@ -16,11 +16,24 @@ spec:
         app: demo
     spec:
       containers:
-        - image: nginx:1.7.9
-          name: nginx
+        - image: ghcr.io/lacop/hello-gke:latest
+          name: hello-gke
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: http
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: KUBERNETES_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: KUBERNETES_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
       # todo anti-affinity
 ---
 apiVersion: v1
@@ -33,7 +46,7 @@ metadata:
 spec:
   ports:
     - port: 8080
-      targetPort: 80
+      targetPort: 8080
       protocol: TCP
   selector:
     app: demo
