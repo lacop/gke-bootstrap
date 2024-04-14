@@ -1,10 +1,14 @@
-# Slack yt-dlp integration
+# GKE bootstrap
+
+Automation to create and configure a basic, cheap GKE cluster.
+
+Based on the great [How to Run a GKE Cluster on the Cheap](https://github.com/murphye/cheap-gke-cluster/), updated, simplified and customized for my needs.
 
 ## Dev environment
 
 Requires `nix` and flakes enabled. Then just `nix develop --no-write-lock-file` to enter the dev shell.
 
-### GKE initial bootstrap
+## GKE initial bootstrap
 
 ```shell
 # Configure gcloud CLI
@@ -28,10 +32,6 @@ gcloud container clusters get-credentials <cluster-name>
 kubectl get nodes
 ```
 
-### Command reference
+## Command reference
 
 Find external cluster IP: `gcloud compute addressed list`.
-
-## References
-
-- Terraform GKE setup based on [How to Run a GKE Cluster on the Cheap](https://github.com/murphye/cheap-gke-cluster/)
