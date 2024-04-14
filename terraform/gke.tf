@@ -3,6 +3,8 @@ provider "google" {
     region  = var.region
 }
 
+data "google_client_config" "provider" {}
+
 resource "google_container_cluster" "default" {
     provider = google
     project  = var.project_id
